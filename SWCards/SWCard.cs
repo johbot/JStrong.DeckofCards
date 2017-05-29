@@ -16,14 +16,14 @@ namespace ShiftWiseCards
     /// </summary>
     public enum CardValue { two = 2, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace };
 
-    public class Card
+    public class Card : IComparable<Card>
     {
         private CardSuit _cardSuit;
         private CardValue _cardValue;
 
         public CardSuit Suit
         {
-        get { return _cardSuit; }
+            get { return _cardSuit; }
         }
 
         public CardValue Value
@@ -31,10 +31,11 @@ namespace ShiftWiseCards
             get { return _cardValue; }
         }
 
-        public int SortOrder 
+        public int CompareTo(Card otherCard)
         {
-            get { return (int)this._cardSuit * 100 + (int)this._cardValue; }
+            return Suit.CompareTo(otherCard.Suit) * 15 + Value.CompareTo(otherCard.Value);
         }
+
 
         public Card(CardSuit suit, CardValue value)
         {

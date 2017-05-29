@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShiftWiseCards;
-
+using System.Collections.Generic;
 
 namespace SWCardTests
 {
@@ -27,18 +27,54 @@ namespace SWCardTests
         public void CheckAllUnique()
         {
             //arrange
-
-            Deck TestDeck;              
-            var shouldBeThisMany = 52;  
-            var thereAreThisMany = 0;   
+            Deck TestDeck;
+            var shouldBeThisMany = 52;
+            var thereAreThisMany = 0;
 
             //act
             TestDeck = new Deck();
-            thereAreThisMany = TestDeck.Cards.Select(c => c.SortOrder).Distinct().Count();  //Count distint card values through the sort order property
+
+            thereAreThisMany = TestDeck.Cards.Distinct().ToList().Count;
 
             //assert
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
 
+
+        }
+        [TestMethod]
+
+        public void CheckSuits()
+        {
+            //arrange
+            Deck TestDeck;
+            var shouldBeThisMany = 4;
+            var thereAreThisMany = 0;
+
+            //act
+            TestDeck = new Deck();
+
+            thereAreThisMany = TestDeck.Cards.Select(card => card.Suit).Distinct().Count();
+
+            //assert
+            Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
+
+        }
+        [TestMethod]
+
+        public void CheckFaceValues()
+        {
+            //arrange
+            Deck TestDeck;
+            var shouldBeThisMany = 13;
+            var thereAreThisMany = 0;
+
+            //act
+            TestDeck = new Deck();
+
+            thereAreThisMany = TestDeck.Cards.Select(card => card.Value).Distinct().Count();
+
+            //assert
+            Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
 
         }
 
@@ -46,50 +82,33 @@ namespace SWCardTests
         public void CheckSorted()
         {
             //arrange
-
-            Deck TestDeckSorted;  //Sorted deck for checking
-            var distanceFromSorted = 0;
+            Deck TestDeck; //Test deck to use sort method and manual sort
 
             //act
-            TestDeckSorted = new Deck();  //New deck sorted by default 
+            TestDeck = new Deck();
+            var TestDeckManualSort = new List<Card>(TestDeck.Cards.OrderBy(c => c.Suit).ThenBy(c => c.Value).ToList());
 
-            int i = 0;
-            for (int s = 1; s < 5; s++) //Suit counter
-                for(int f = 2; f < 15; f++) //Face counter
-            {
-                    distanceFromSorted += Math.Abs((s*100 + f) - TestDeckSorted.Cards[i].SortOrder);
-                    i++;
-            }
+            TestDeck.Sort();
 
             //assert
-            Assert.AreEqual(distanceFromSorted, 0);
-
-
+            Assert.IsTrue(TestDeck.Cards.SequenceEqual(TestDeckManualSort));
         }
+
         [TestMethod]
         public void CheckShuffled()
         {
             //arrange
-
             Deck TestDeckSorted;  //Default Sorted Deck
             Deck TestDeckShuffled;  //Shuffled Deck 
-
-            var distanceFromSorted = 0;  //very small (1/52!) chance a shuffled deck comes back sorted
 
             //act
             TestDeckSorted = new Deck();
             TestDeckShuffled = new Deck();
+            TestDeckSorted.Sort();
             TestDeckShuffled.Shuffle();
 
-            for (int i = 0; i < 52; i++)
-            {
-                distanceFromSorted += Math.Abs(TestDeckSorted.Cards[i].SortOrder - TestDeckShuffled.Cards[i].SortOrder) ;
-            }
-
             //assert
-            Assert.AreNotEqual(0, distanceFromSorted); 
-
+            Assert.IsFalse(TestDeckSorted.Cards.SequenceEqual(TestDeckShuffled.Cards));
         }
-
     }
 }

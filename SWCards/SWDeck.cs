@@ -9,6 +9,7 @@ namespace ShiftWiseCards
     public class Deck
     {
         public List<Card> Cards { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the Deck class
         /// </summary>
@@ -16,27 +17,21 @@ namespace ShiftWiseCards
         {
             InitializeDeck();
         }
-    private void InitializeDeck()
-    {
-        this.Cards = new List<Card>();
-
-        foreach (CardSuit CurrentSuit in Enum.GetValues(typeof(CardSuit)))
+        private void InitializeDeck()
         {
-            foreach (CardValue CurrentValue in Enum.GetValues(typeof(CardValue)))
+            this.Cards = new List<Card>();
+
+            foreach (CardSuit CurrentSuit in Enum.GetValues(typeof(CardSuit)))
             {
-                this.Cards.Add(new Card(CurrentSuit, CurrentValue));
+                foreach (CardValue CurrentValue in Enum.GetValues(typeof(CardValue)))
+                {
+                    this.Cards.Add(new Card(CurrentSuit, CurrentValue));
+                }
             }
-        }
-            DefaultDeckSort();
+            Cards.Sort();
 
-    }
-        /// <summary>
-        /// Sort deck of cards ascending on default suit and card value, lowest card 2 of clubs, highest ace of spades
-        /// </summary>
-        public void DefaultDeckSort()
-        {
-            Cards = Cards.OrderBy(c => c.SortOrder).ToList();
         }
+
         /// <summary>
         /// Shuffle Cards using sort by GUID
         /// </summary>
@@ -47,6 +42,12 @@ namespace ShiftWiseCards
             Cards = Cards.OrderBy(c => Guid.NewGuid()).ToList();
         }
 
-
+        /// <summary>
+        /// Sort deck of cards ascending on default suit and card value, lowest card 2 of clubs, highest ace of spades
+        /// </summary>
+        public void Sort()
+        {
+            Cards.Sort();
+        }
     }
 }
