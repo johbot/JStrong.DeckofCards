@@ -10,38 +10,22 @@ namespace ShiftWiseCards
     /// The order of the suits is determined by alphabetical order (same ranking is used in bridge)
     /// Spades are high       
     /// </summary>
-    public enum CardSuit { clubs = 1, diamonds, hearts, spades };
+    public enum CardSuit { clubs , diamonds, hearts, spades };
     /// <summary>
-    /// The face value of the card, Ace is high
+    /// The face value of the card, ace is low, king is high
     /// </summary>
-    public enum CardValue { two = 2, three, four, five, six, seven, eight, nine, ten, jack, queen, king, ace };
+    public enum CardValue { ace, two, three, four, five, six, seven, eight, nine, ten, jack, queen, king };
 
-    public class Card : IComparable<Card>
+    public class Card 
     {
-        private CardSuit _cardSuit;
-        private CardValue _cardValue;
+        public CardSuit Suit { get; set; }
 
-        public CardSuit Suit
-        {
-            get { return _cardSuit; }
-        }
-
-        public CardValue Value
-        {
-            get { return _cardValue; }
-        }
-
-        public int CompareTo(Card otherCard)
-        {
-            return Suit.CompareTo(otherCard.Suit) * 15 + Value.CompareTo(otherCard.Value);
-        }
-
+        public CardValue Value { get; set; }
 
         public Card(CardSuit suit, CardValue value)
         {
-            _cardSuit = suit;
-            _cardValue = value;
-
+            this.Suit = suit;
+            this.Value = value;
         }
     }
 }
