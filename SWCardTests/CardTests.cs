@@ -18,8 +18,8 @@ namespace SWCardTests
 
             //Verify total number of cards are correct
             Assert.AreEqual(shouldBeThisMany, TestDeck.Cards.Count);
-
         }
+
         [TestMethod]
         public void CheckAllUnique()
         {
@@ -30,8 +30,8 @@ namespace SWCardTests
             //Verify all cards are unique
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckSuits()
         {
             var TestDeck = new Deck(); //New deck for testing
@@ -40,10 +40,9 @@ namespace SWCardTests
 
             //Verify there are the correct number of suits
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
-
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckFaceValues()
         {
             var TestDeck = new Deck();  //New deck for testing
@@ -65,7 +64,7 @@ namespace SWCardTests
 
             // Create a test deck and sort using the Sort method. 
             var TestDeckSorted = new Deck();
-            var sortResult = TestDeckSorted.Sort();
+            var sortResult = TestDeckSorted.Cards.ToList();
 
             // Verify that explict sort is the same as Sort(). 
             Assert.IsTrue(explicitlySortedCards.SequenceEqual(sortResult, new CardComparer()));
@@ -81,11 +80,12 @@ namespace SWCardTests
             // Create a test deck and shuffle. 
             var TestDeckSuffle = new Deck();
             TestDeckSuffle.Shuffle();
-            var shuffleResult = TestDeckSorted.Sort();
+            var shuffleResult = TestDeckSuffle.Cards.ToList();
 
-            // Verify that the two lists are the same. 
-            Assert.IsTrue(TestDeckSorted.Cards.SequenceEqual(shuffleResult, new CardComparer()));
+            // Verify that Shuffle() deck sequence does not match Sort() deck. 
+            Assert.IsFalse(TestDeckSorted.Cards.SequenceEqual(shuffleResult, new CardComparer()));
         }
+
         [TestMethod]
         public void CheckNumberOfCardsAfterSort()
         {
@@ -95,8 +95,8 @@ namespace SWCardTests
 
             //Verify total number of cards are correct after sorting
             Assert.AreEqual(shouldBeThisMany, TestDeckSorted.Cards.Count);
-
         }
+
         [TestMethod]
         public void CheckAllUniqueAfterSort()
         {
@@ -108,8 +108,8 @@ namespace SWCardTests
             //Verify all cards are unique after sorting
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckSuitsAfterSort()
         {
             var TestDeckSorted = new Deck(); //New deck for testing
@@ -119,10 +119,9 @@ namespace SWCardTests
 
             //Verify there are the correct number of suits after sorting
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
-
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckFaceValuesAfterSort()
         {
             var TestDeckSorted = new Deck(); //New deck for testing
@@ -132,7 +131,6 @@ namespace SWCardTests
 
             //Verify there are the correct number of card values after sorting
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
-
         }
 
         [TestMethod]
@@ -145,6 +143,7 @@ namespace SWCardTests
             //Verify total number of cards are correct after shuffling
             Assert.AreEqual(shouldBeThisMany, TestDeckShuffled.Cards.Count);
         }
+
         [TestMethod]
         public void CheckAllUniqueAfterShuffle()
         {
@@ -156,8 +155,8 @@ namespace SWCardTests
             //Verify all cards are unique after shuffling
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckSuitsAfterShuffle()
         {
             var TestDeckShuffled = new Deck(); //New deck for testing
@@ -168,11 +167,10 @@ namespace SWCardTests
             //Verify there are the correct number of suits after shuffling
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
-        [TestMethod]
 
+        [TestMethod]
         public void CheckFaceValuesAfterShuffle()
         {
-            //arrange
             var TestDeckShuffled = new Deck(); //New deck for testing
             TestDeckShuffled.Shuffle();
             var shouldBeThisMany = 13;  //Standard Deck has 13 face values ace to king
@@ -182,6 +180,7 @@ namespace SWCardTests
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
     }
+
     /// <summary>
     /// Determine whether two sequences of cards are the same. 
     /// </summary>
@@ -192,6 +191,9 @@ namespace SWCardTests
         {
             //Check whether the compared cards reference the same data.
             if (object.ReferenceEquals(x, y)) return true;
+
+            //Check whether both of the compared cards are null.
+            if (object.ReferenceEquals(x, null) && object.ReferenceEquals(y, null)) return true;
 
             //Check whether any of the compared cards is null.
             if (object.ReferenceEquals(x, null) || object.ReferenceEquals(y, null)) return false;

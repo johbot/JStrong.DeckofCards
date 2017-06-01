@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShiftWiseCards
 {
@@ -22,9 +20,9 @@ namespace ShiftWiseCards
             Cards = new List<Card>();
 
             //First get suit for each card 
-            Cards.AddRange(Enumerable.Range(0, 4)
+            Cards.AddRange(Enumerable.Range(1, 4)
                 //Then get the value for each card
-                .SelectMany(CardSuit => Enumerable.Range(0, 13)
+                .SelectMany(CardSuit => Enumerable.Range(1, 13)
                     //Then assign these to a card
                     .Select(Value => new Card((CardSuit)CardSuit, (CardValue)Value))));
         }
