@@ -25,7 +25,8 @@ namespace SWCardTests
         {
             var TestDeck = new Deck();  //New deck for testing
             var shouldBeThisMany = 52;  //Standard Deck has 52 unique cards excluding jokers
-            var thereAreThisMany = TestDeck.Cards.Distinct().ToList().Count;
+            //var thereAreThisMany = TestDeck.Cards.Distinct().ToList().Count;
+            var thereAreThisMany = TestDeck.Cards.Select(card => card.SortOrder).Distinct().Count();
 
             //Verify all cards are unique
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
@@ -64,6 +65,8 @@ namespace SWCardTests
 
             // Create a test deck and sort using the Sort method. 
             var TestDeckSorted = new Deck();
+            TestDeckSorted.Sort();
+            //TestDeckSorted.DefaultOrderDeck();
             var sortResult = TestDeckSorted.Cards.ToList();
 
             // Verify that explict sort is the same as Sort(). 
@@ -96,6 +99,16 @@ namespace SWCardTests
             //Verify total number of cards are correct after sorting
             Assert.AreEqual(shouldBeThisMany, TestDeckSorted.Cards.Count);
         }
+        [TestMethod]
+        public void CheckNumberOfCardsAfterSortAceHi()
+        {
+            var TestDeckSorted = new Deck();  //New deck for testing
+            var shouldBeThisMany = 52;  //Standard Deck has 52 cards excluding jokers
+            TestDeckSorted.Sort(1);  //Ace high overload sort
+
+            //Verify total number of cards are correct after sorting
+            Assert.AreEqual(shouldBeThisMany, TestDeckSorted.Cards.Count);
+        }
 
         [TestMethod]
         public void CheckAllUniqueAfterSort()
@@ -103,7 +116,7 @@ namespace SWCardTests
             var TestDeckSorted = new Deck(); //New deck for testing
             TestDeckSorted.Sort();
             var shouldBeThisMany = 52; //Standard Deck has 52 unique cards excluding jokers
-            var thereAreThisMany = TestDeckSorted.Cards.Distinct().ToList().Count;
+            var thereAreThisMany = TestDeckSorted.Cards.Select(card => card.SortOrder).Distinct().Count();
 
             //Verify all cards are unique after sorting
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
@@ -150,7 +163,7 @@ namespace SWCardTests
             var TestDeckShuffled = new Deck(); //New deck for testing
             TestDeckShuffled.Shuffle();
             var shouldBeThisMany = 52;  //Standard Deck has 52 unique cards excluding jokers
-            var thereAreThisMany = TestDeckShuffled.Cards.Distinct().ToList().Count;
+            var thereAreThisMany = TestDeckShuffled.Cards.Select(card => card.SortOrder).Distinct().Count();
 
             //Verify all cards are unique after shuffling
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
@@ -179,6 +192,35 @@ namespace SWCardTests
             //Verify there are the correct number of card values after shuffling
             Assert.AreEqual(shouldBeThisMany, thereAreThisMany);
         }
+        [TestMethod]
+        public void DoubleNullCheck()
+        {
+            var TestDeck1 = new Deck(); //New deck for testing
+            var TestDeck2 = new Deck();
+            TestDeck1.Sort();
+            TestDeck2.Sort();
+
+            TestDeck1.Cards[2] = null;
+            TestDeck2.Cards[2] = null;
+
+            var sortResult1 = TestDeck1.Cards.ToList();
+            var sortResult2 = TestDeck2.Cards.ToList();
+
+            //Verify double null 
+            Assert.IsTrue(sortResult1.SequenceEqual(sortResult2, new CardComparer()));
+        }
+        [TestMethod]
+        public void AceHighCheck()
+        {
+            var TestDeck1 = new Deck(); //New deck for testing
+            TestDeck1.Sort(1);  //Sort overload for ace high
+            var lastIndex = TestDeck1.Cards.ToList().Count - 1;  //deck starts at 0
+
+            var topCard = TestDeck1.Cards[lastIndex];  //get last card
+            
+            //Verify top card is Ace of Spades
+            Assert.IsTrue(topCard.Suit==CardSuit.spades && topCard.Value==CardValue.ace);
+        }   
     }
 
     /// <summary>
