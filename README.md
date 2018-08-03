@@ -1,2 +1,2 @@
-# JStrong.ShiftWiseCardChallenge
-C# ShiftWise Code Challenge
+# JStrong.DeckofCards
+C# Code Challenge
