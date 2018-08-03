@@ -1,2 +1,2 @@
-# JStrong.DeckofCards
+# johbot.DeckofCards
 C# Code Challenge
